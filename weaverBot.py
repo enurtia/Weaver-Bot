@@ -60,21 +60,24 @@ def getShortestPath(wordsList, startingWord, endingWord):
         
     curWordObj = wordMap[endingWord]
     path = [curWordObj.word]
-    while lastNode[curWordObj] is not startingWordObj:
+    while (lastNode[curWordObj] is not startingWordObj) and lastNode[curWordObj] is not None:
         nextWordObj = lastNode[curWordObj]
         path += [nextWordObj.word]
         curWordObj = nextWordObj
     path += [startingWordObj.word]
     
-    print(path[::-1])
+    if path[-1] is None:
+        print("No valid path found in word list.")
+    else:
+        print(path[::-1])
     
 
 #---------Load 4 letter words---------
 words = np.loadtxt("PATH.txt", dtype=str)
 words = np.char.lower(words)
     
-startWord = input("Start word: ")
-endWord = input("End Word: ")
+startWord = input("Start word: ").lower()
+endWord = input("End Word: ").lower()
     
 while True:
     wordObjects = np.empty(0)
@@ -84,11 +87,12 @@ while True:
         wordObjects = np.append(wordObjects, w)
 
     getShortestPath(wordObjects, startWord, endWord)
-    removeWordRaw = input("Remove word/words (comma separate), or just press enter: ")
+    removeWordRaw = input("Remove word/words (comma separate), or just press enter: ").lower()
     removeWordArr = removeWordRaw.replace(" ", "").split(",")
     
     if len(removeWordRaw) == 0:
         break
     
     for removalWord in removeWordArr:
-        words = np.delete(words, np.where(words == removalWord))
+        if removalWord != startWord and removalWord != endWord:
+            words = np.delete(words, np.where(words == removalWord))
