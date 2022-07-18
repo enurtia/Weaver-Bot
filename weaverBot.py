@@ -34,7 +34,6 @@ def getShortestPath(wordsList, startingWord, endingWord):
         least = float('inf')
         leastKey = None
         for key in distancesList:
-            #print(key.word, " ", distance[key]) 
             if distance[key] < least:
                 least = distance[key]
                 leastKey = key
