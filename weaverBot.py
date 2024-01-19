@@ -9,19 +9,28 @@ startWord = input("Start word: ").lower()
 endWord = input("End Word: ").lower()
 
 
+#Pre-process words with HashMap before creating adjacency list.
+
+hashMap = {}
+for word in words:
+	#abcd: 1bcd, a2cd, ab3d, abc4
+	for j in range(len(word)):
+		key = word[:j] + str(j+1) + word[j+1:]
+		if key not in hashMap:
+			hashMap[key] = [word]
+		else:
+			hashMap[key] += [word]
+
+
 #Create adjacency list
 dist = {}
 adjacencyList = {}
 for word in words:
 	dist[word] = float("inf")
 	adjacencyList[word] = []
-	for w in words:
-		difCount = 0
-		for i in range(4):
-			if(w[i] != word[i]):
-				difCount += 1
-		if difCount == 1:
-			adjacencyList[word] += [w]
+	for j in range(len(word)):
+		key = word[:j] + str(j+1) + word[j+1:]
+		adjacencyList[word] += hashMap[key] #Will contain 4 instances of our word
 
 
 #Breadth-First Search
@@ -52,3 +61,5 @@ else:
 		pathTravel += [pathTraversal[nextWord]]
 		nextWord = pathTravel[-1]
 	print(pathTravel[::-1])
+
+
